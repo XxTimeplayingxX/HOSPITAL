@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.ComponentModel;
+
 namespace HOSPITAL
 {
     public class RJButton : Button
@@ -16,71 +18,137 @@ namespace HOSPITAL
         private int borderRadius = 40;
         private Color borderColor = Color.PaleVioletRed;
 
-    //Constructor
-    public RJButton ()
-    { 
-        this.FlatStyle = FlatStyle.Flat;
-        this.FlatAppearance.BorderSize = 0;
-        this.Size = new Size();
-        this.BackColor = Color.MediumSlateBlue;
+        //Propiedades
+        [Category("RJ Code Advanced")]
+        public int Bordersize 
+        {
+            get
+            {   
+                return bordersize;
+            }
+
+            set
+            {
+                bordersize = value;
+                this.Invalidate();
+            }
+        }
+
+        [Category("RJ Code Advanced")]
+        public int BorderRadius 
+        {
+            get
+            {
+                return borderRadius;
+            }
+
+            set
+            {
+                borderRadius = value;
+                this.Invalidate();
+            }
+        }
+
+        [Category("RJ Code Advanced")]
+        public Color BorderColor
+        {
+            get
+            {
+               return borderColor;
+            }
+
+            set
+            {
+                borderColor = value;
+                this.Invalidate();
+            }
+        }
+
+        [Category("RJ Code Advanced")]
+        public Color TextColor
+        {
+            get
+            {
+                return this.ForeColor;
+            }
+
+            set
+            {
+               this.ForeColor = value;
+            }
+        }
+        //Constructor
+        public RJButton ()
+        { 
+            this.FlatStyle = FlatStyle.Flat;
+            this.FlatAppearance.BorderSize = 0;
+            this.Size = new Size();
+            this.BackColor = Color.MediumSlateBlue;
             this.ForeColor = Color.White;
-        
-                }
-    //metodos Privados
-    private GraphicsPath GetFigurePath(Rectangle rect, float radius)
-    {
+            this.Resize += new EventHandler(Button_Resize);
+        }
+
+        private void Button_Resize(object sender, EventArgs e)
+        {
+            if(borderRadius > this.Height)
+               borderRadius = this.Height;
+        }
+
+        //metodos Privados
+        private GraphicsPath GetFigurePath(RectangleF rect, float radius)
+        {
             GraphicsPath path = new GraphicsPath();
             path.StartFigure();
-            path.AddArc(rect.X, rect.Y, radius, radius, 180, 90);
-            path.AddArc(rect.Width - radius, rect.Y, radius, radius, 180, 90);
+            path.AddArc(rect.X,rect.Y, radius, radius, 180,90);
+            path.AddArc(rect.Width - radius, rect.Y, radius, radius, 270, 90);
             path.AddArc(rect.Width - radius, rect.Height - radius, radius, radius, 0, 90);
             path.AddArc(rect.X, rect.Height - radius, radius, radius, 90, 90);
             path.CloseFigure();
 
             return path;
-    }
-    protected override void OnPaint(PaintEventArgs pevent)
-        {
-            base.OnPaint(pevent);
-            pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-
-            Rectangle rectSurface = new Rectangle(0, 0, this.Width, this.Height);
-            Rectangle rectBorder = new Rectangle(1,1,this.Width-0.8F, this.Height - 1);
-
-            if (borderRadius > 2)//Boton Redondeado
+        }
+        protected override void OnPaint(PaintEventArgs pevent)
             {
-                using (GraphicsPath pathSurface = GetFigurePath(rectSurface, borderRadius))
-                using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius - 1F))
-                using (Pen pensurFace = new Pen(this.Parent.BackColor, 2))
-                using (Pen penBorder = new Pen(borderColor, bordersize))
-                {
-                    penBorder.Alignment= PenAlignment.Center;
-                    this.Region = new Region(pathSurface);
-                    //Dibujar superficie
-                    pevent.Graphics.DrawPath(pensurFace, pathSurface);
+                base.OnPaint(pevent);
+                pevent.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
 
-                    //Button Border
-                    if(bordersize >= 1)
-                        pevent.Graphics.DrawPath(penBorder, pathBorder);
-                }
+                RectangleF rectSurface = new RectangleF(0, 0,this.Width, this.Height);
+                RectangleF rectBorder = new RectangleF(1,1,this.Width-0.8F, this.Height - 1);
 
-            }
-            else //Normal Button
-            {
-                //button surface 
-                this.Region = new Region(rectSurface);
-                //Button border
-                if (bordersize > 1)
+                if (borderRadius > 2)//Boton Redondeado
                 {
+                    using (GraphicsPath pathSurface = GetFigurePath(rectSurface, borderRadius))
+                    using (GraphicsPath pathBorder = GetFigurePath(rectBorder, borderRadius - 1F))
+                    using (Pen pensurFace = new Pen(this.Parent.BackColor, 2))
                     using (Pen penBorder = new Pen(borderColor, bordersize))
                     {
-                        penBorder.Alignment = PenAlignment.Inset;
-                        pevent.Graphics.DrawRectangle(penBorder, 0, 0, this.Width-1,this.Height-1);
-                    }
-                }
+                        penBorder.Alignment= PenAlignment.Center;
+                        this.Region = new Region(pathSurface);
+                        //Dibujar superficie
+                        pevent.Graphics.DrawPath(pensurFace, pathSurface);
 
+                        //Button Border
+                        if(bordersize >= 1)
+                            pevent.Graphics.DrawPath(penBorder, pathBorder);
+                    }
+
+                }
+                else //Normal Button
+                {
+                    //button surface 
+                    this.Region = new Region(rectSurface);
+                    //Button border
+                    if (bordersize > 1)
+                    {
+                        using (Pen penBorder = new Pen(borderColor, bordersize))
+                        {
+                            penBorder.Alignment = PenAlignment.Inset;
+                            pevent.Graphics.DrawRectangle(penBorder, 0, 0, this.Width-1,this.Height-1);
+                        }
+                    }
+
+                }
             }
-        }
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
@@ -91,5 +159,6 @@ namespace HOSPITAL
             if (this.DesignMode)
                 this.Invalidate();
         }
+
     }
 }
