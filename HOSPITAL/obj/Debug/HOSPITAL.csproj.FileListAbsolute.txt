@@ -9,3 +9,6 @@ C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.c
 C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.csproj.CoreCompileInputs.cache
 C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.exe
 C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.pdb
+C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.Form2.resources
+C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.Form3.resources
+C:\Users\David\Desktop\Brand_new_Programs\HOSPITAL\HOSPITAL\obj\Debug\HOSPITAL.Form4.resources
